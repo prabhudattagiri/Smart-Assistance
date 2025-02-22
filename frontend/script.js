@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
         backBtn: document.getElementById("backBtn")
     };
 
+    // Variable to hold the typing indicator element
+    let typingIndicator = null;
+
     // Append a message to the chat box
     function appendMessage(message, sender) {
         if (!elements.chatBox) return;
@@ -24,9 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const userText = elements.userInput.value.trim();
         if (userText === "") return;
 
-        // Append the user message and show a temporary typing indicator
+        // Append the user message
         appendMessage(userText, "student");
-        appendMessage("Typing...", "teacher");
+
+        // Append and store the typing indicator
+        typingIndicator = document.createElement("div");
+        typingIndicator.classList.add("message", "teacher");
+        typingIndicator.innerHTML = `<span class="text">Typing...</span>`;
+        elements.chatBox.appendChild(typingIndicator);
+        elements.chatBox.scrollTop = elements.chatBox.scrollHeight;
 
         elements.userInput.disabled = true;
 
@@ -38,17 +47,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             const data = await response.json();
 
-            // Remove the typing indicator (assumes the last teacher message is the indicator)
-            const teacherMessages = elements.chatBox.querySelectorAll(".teacher .text");
-            if (teacherMessages.length) {
-                teacherMessages[teacherMessages.length - 1].parentElement.remove();
+            // Remove the typing indicator
+            if (typingIndicator) {
+                typingIndicator.remove();
+                typingIndicator = null;
             }
-            appendMessage(data?.bot_response || "No response from server.", "teacher");
+            appendMessage(data.bot_response || "No response from server.", "teacher");
         } catch (error) {
             console.error("Error:", error);
-            const teacherMessages = elements.chatBox.querySelectorAll(".teacher .text");
-            if (teacherMessages.length) {
-                teacherMessages[teacherMessages.length - 1].parentElement.remove();
+            if (typingIndicator) {
+                typingIndicator.remove();
+                typingIndicator = null;
             }
             appendMessage("Error connecting to server.", "teacher");
         } finally {
@@ -74,7 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (elements.clearBtn) {
         elements.clearBtn.addEventListener("click", () => {
-            elements.chatBox.innerHTML = "";
+            if (elements.chatBox) {
+                elements.chatBox.innerHTML = "";
+            }
         });
     }
     if (elements.backBtn) {
