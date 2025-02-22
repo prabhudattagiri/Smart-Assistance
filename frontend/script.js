@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.userInput.disabled = true;
 
         try {
-            const response = await fetch("/api/chat", {
+            const response = await fetch("https://smart-assistantbot.onrender.com/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ message: userText })
