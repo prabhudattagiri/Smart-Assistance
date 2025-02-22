@@ -8,6 +8,62 @@ document.addEventListener("DOMContentLoaded", () => {
         backBtn: document.getElementById("backBtn")
     };
 
+    // Response mapping: keywords to response arrays
+    const responses = {
+        "hello": [
+            "hii", "what's up"
+        ],
+        "courses": [
+            "What are the courses", "give me courses"
+        ],
+        "fee": [
+            "What's the fee", "Fee structure", "my next payment"
+        ],
+        "syllabus": [
+            "What's the syllabus for my course", "Where can i download my syllabus"
+        ],
+        "exam timetable": [
+            "When is exam", "Exam", "Exam schedule"
+        ],
+        "holidays": [
+            "Next holidays"
+        ],
+        "results": [
+            "topper's list", "university topper"
+        ],
+        "clubs": [
+            "What clubs available", "clubs detail", "how many clubs"
+        ],
+        "library timings": [
+            "when is library open", "library timing", "what are library hours", "library open time", "until what time is the library open"
+        ],
+        "canteen hours": [
+            "canteen timing", "breakfast time", "lunch", "dinner", "when does the canteen open", "what time is breakfast in the canteen", "when is lunch served", "dinner time in the canteen", "canteen open hours"
+        ],
+        "hostel facilities": [
+            "where can i stay", "hostel", "hostel details"
+        ],
+        "unknown": [
+            "Sorry! i don't know"
+        ]
+    };
+
+    // Function to get a random response based on user input
+    function getResponse(userInput) {
+        const lowerInput = userInput.toLowerCase();
+        // Iterate over the keys except for "unknown"
+        for (const key in responses) {
+            if (key === "unknown") continue;
+            if (lowerInput.includes(key)) {
+                const arr = responses[key];
+                return arr[Math.floor(Math.random() * arr.length)];
+            }
+        }
+        // If no matching key is found, return unknown response
+        const unknownArr = responses["unknown"];
+        return unknownArr[Math.floor(Math.random() * unknownArr.length)];
+    }
+
     // Variable to hold the typing indicator element
     let typingIndicator = null;
 
@@ -21,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.chatBox.scrollTop = elements.chatBox.scrollHeight;
     }
 
-    // Send a message to the backend API
+    // Simulate sending a message and getting a response
     async function sendMessage() {
         if (!elements.userInput) return;
         const userText = elements.userInput.value.trim();
@@ -39,31 +95,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         elements.userInput.disabled = true;
 
-        try {
-            const response = await fetch("https://smart-assistantbot.onrender.com/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: userText })
-            });
-            const data = await response.json();
-
+        // Simulate a delay to mimic a backend call (e.g., 500ms)
+        setTimeout(() => {
             // Remove the typing indicator
             if (typingIndicator) {
                 typingIndicator.remove();
                 typingIndicator = null;
             }
-            appendMessage(data.bot_response || "No response from server.", "teacher");
-        } catch (error) {
-            console.error("Error:", error);
-            if (typingIndicator) {
-                typingIndicator.remove();
-                typingIndicator = null;
-            }
-            appendMessage("Error connecting to server.", "teacher");
-        } finally {
+            // Get the response based on the user input
+            const botResponse = getResponse(userText);
+            appendMessage(botResponse, "teacher");
+
             elements.userInput.value = "";
             elements.userInput.disabled = false;
-        }
+        }, 500);
     }
 
     // Event listeners
