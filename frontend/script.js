@@ -10,18 +10,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Define the intents object with key phrases
   const intents = {
-    "hello": ["hii", "what's up", "hello", "hi", "hey"],
-    "courses": ["what are the courses", "give me courses"],
-    "fee": ["what's the fee", "fee structure", "my next payment"],
-    "syllabus": ["what's the syllabus for my course", "where can i download my syllabus"],
-    "exam timetable": ["when is exam", "exam", "exam schedule"],
-    "holidays": ["next holidays"],
-    "results": ["topper's list", "university topper"],
-    "clubs": ["what clubs available", "clubs detail", "how many clubs"],
-    "library timings": [
+    "hello": ["hi","hii","hello","what's up","hey"],
+    "courses": ["courses","what are the courses", "give me courses"],
+    "fee": ["fee","what's the fee", "fee structure", "my next payment"],
+    "syllabus": ["syllabus","what's the syllabus for my course", "where can i download my syllabus"],
+    "exam timetable": ["exam timetable","when is exam", "exam", "exam schedule"],
+    "holidays": ["holidays","next holidays"],
+    "results": ["results","topper's list", "university topper"],
+    "clubs": ["clubs","what clubs available", "clubs detail", "how many clubs"],
+    "library timings": ["library",
       "when is library open", "library timing", "what are library hours", "library open time", "until what time is the library open"
     ],
-    "canteen hour": [
+    "canteen hour": ["canteen",
       "canteen timing", "brakfast time", "lunch", "dinner", "when does the canteen open",
       "what time is breakfast in the canteen", "when is lunch served", "dinner time in the canteen", "canteen open hours"
     ],
