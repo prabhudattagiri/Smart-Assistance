@@ -151,3 +151,11 @@ if (elements.backBtn) {
     });
 }
   });
+
+// Hide code from user
+document.addEventListener("contextmenu", (e) => e.preventDefault()); // Disable right-click  
+document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && (e.key === "u" || e.key === "s" || e.key === "i" || e.key === "j" || e.key === "c")) {
+        e.preventDefault();
+    }
+});
