@@ -33,8 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const responses = {
     "hello": ["Hello! How can I assist you with your college related work today?"],
     "courses": "The college offers BBA, BCA, BA, PSC. See details on the college website.",
-    "fee": "💰The fee structure depends on the course. To know about installments or payment deadlines, check here (https://www.imperial.edu.in/fee-details)",
-    "syllabus": "📚You can find the syllabus for your course at (https://www.imperial.edu.in/downloads/Syllabus#programme-syllabus)",
+    "fee": "💰The fee structure depends on the course. To know about installments or payment deadlines, check here (<a href='https://www.imperial.edu.in/fee-details' target='_blank'>Fee Details</a>)",
+    "syllabus": "📚You can find the syllabus for your course at (<a href='https://www.imperial.edu.in/downloads/Syllabus#programme-syllabus' target='_blank'>Download Syllabus</a>")",
     "exam timetable": "The exam schedule 🗓️ will be published by the university. Keep an eye on the noticeboard.",
     "holidays": "For holidays, you can check the academic calendar in your Sahaj app.",
     "results": "Want to know who aced it 🏆? For the latest ranking, visit https://www.imperial.edu.in/academic-achievements.",
