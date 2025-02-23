@@ -10,48 +10,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Define the intents object with key phrases
     const intents = {
-        "hello": [
-            "hii", "what's up"
-        ],
-        "courses": [
-            "What are the courses", "give me courses"
-        ],
-        "fee": [
-            "What's the fee", "Fee structure", "my next payment"
-        ],
-        "syllabus": [
-            "What's the syllabus for my course", "Where can i download my syllabus"
-        ],
-        "exam timetable": [
-            "When is exam", "Exam", "Exam schedule"
-        ],
-        "holidays": [
-            "Next holidays"
-        ],
-        "results": [
-            "topper's list", "university topper"
-        ],
-        "clubs": [
-            "What clubs available", "clubs detail", "how many clubs"
-        ],
+        "hello": ["hii", "what's up", "hello", "hi", "hey"],
+        "courses": ["what are the courses", "give me courses"],
+        "fee": ["what's the fee", "fee structure", "my next payment"],
+        "syllabus": ["what's the syllabus for my course", "where can i download my syllabus"],
+        "exam timetable": ["when is exam", "exam", "exam schedule"],
+        "holidays": ["next holidays"],
+        "results": ["topper's list", "university topper"],
+        "clubs": ["what clubs available", "clubs detail", "how many clubs"],
         "library timings": [
             "when is library open", "library timing", "what are library hours", "library open time", "until what time is the library open"
         ],
         "canteen hour": [
-            "canteen timing", "brakfast time", "lunch", "dinner", "when does the canteen open", "what time is breakfast in the canteen", "when is lunch served", "dinner time in the canteen", "canteen open hours"
+            "canteen timing", "brakfast time", "lunch", "dinner", "when does the canteen open",
+            "what time is breakfast in the canteen", "when is lunch served", "dinner time in the canteen", "canteen open hours"
         ],
-        "hostel facilities": [
-            "where can i stay", "hostel", "hostel details"
-        ],
-        "unknown": [
-            "Sorry! i don't know"
-        ]
+        "hostel facilities": ["where can i stay", "hostel", "hostel details"],
+        "unknown": ["sorry! i don't know"]
     };
 
     // Define the responses object with reply text
     const responses = {
-        "hello": ["Hello! How can i assist you with your college related work today ?"],
-        "courses": "The college offers BBA, BCA, BA, Psc. See details on the college website.",
+        "hello": ["Hello! How can I assist you with your college related work today?"],
+        "courses": "The college offers BBA, BCA, BA, PSC. See details on the college website.",
         "fee": "💰The fee structure depends on the course. To know about installments or payment deadlines, check here (https://www.imperial.edu.in/fee-details)",
         "syllabus": "📚You can find the syllabus for your course at (https://www.imperial.edu.in/downloads/Syllabus#programme-syllabus)",
         "exam timetable": "The exam schedule 🗓️ will be published by the university. Keep an eye on the noticeboard.",
@@ -59,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "results": "Want to know who aced it 🏆? For the latest ranking, visit https://www.imperial.edu.in/academic-achievements.",
         "clubs": "Clubs run the show! 🎤 Cultural, sports, social activities and more—find your place! Check details here https://www.imperial.edu.in/campus-life/clubs",
         "library timings": "📖 Books, Peace, and Knowledge! Visit the library from 10 AM to 4 PM.",
-        // Note: For canteen, the intents key is "canteen hour" but here the response key is "Canteen hours"
+        // For canteen, note the key difference between intent and response (we use "Canteen hours")
         "Canteen hours": "🍕 Hungry! Breakfast: 8:30 AM to 8:45 AM, Lunch: 1:15 PM to 2:00 PM, Dinner: 7:30 PM to 8:00 PM.",
         "hostel facilities": "🏡 Hostel life is fun! The details are available with the warden.",
         "unknown": "I'm sorry, I don't understand. Can you rephrase it?"
@@ -68,17 +49,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Function to retrieve a response based on user input
     function getResponse(userInput) {
         const lowerInput = userInput.toLowerCase();
+        console.log("Processing input:", lowerInput);
         // Loop through each intent (except "unknown")
         for (const key in intents) {
             if (key === "unknown") continue;
             for (let phrase of intents[key]) {
-                // If the user's input contains the phrase (case-insensitive)
+                // Check if the input contains the phrase
                 if (lowerInput.includes(phrase.toLowerCase())) {
                     let matchedKey = key;
-                    // Fix for canteen: if key is "canteen hour", use the responses key "Canteen hours"
+                    // If the key is "canteen hour", use the response key "Canteen hours"
                     if (matchedKey === "canteen hour") {
                         matchedKey = "Canteen hours";
                     }
+                    console.log("Matched intent:", key, "-> using response key:", matchedKey);
                     const reply = responses[matchedKey];
                     if (Array.isArray(reply)) {
                         return reply[Math.floor(Math.random() * reply.length)];
@@ -88,9 +71,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         }
-        // Return unknown response if no intent matches
+        // If no matching intent is found, return unknown response
+        console.log("No matching intent found. Using unknown response.");
         const unknownReply = responses["unknown"];
-        return typeof unknownReply === "string" ? unknownReply : unknownReply[Math.floor(Math.random() * unknownReply.length)];
+        return typeof unknownReply === "string"
+            ? unknownReply
+            : unknownReply[Math.floor(Math.random() * unknownReply.length)];
     }
 
     // Variable to hold the typing indicator element
@@ -124,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         elements.userInput.disabled = true;
 
-        // Simulate a delay to mimic processing
+        // Simulate a delay (e.g., 500ms) to mimic processing time
         setTimeout(() => {
             if (typingIndicator) {
                 typingIndicator.remove();
