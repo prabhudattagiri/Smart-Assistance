@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
         backBtn: document.getElementById("backBtn")
     };
 
-    // Response mapping: keywords to response arrays
-    const responses = {
+    // Define the intents object with key phrases
+    const intents = {
         "hello": [
             "hii", "what's up"
         ],
@@ -37,8 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "library timings": [
             "when is library open", "library timing", "what are library hours", "library open time", "until what time is the library open"
         ],
-        "canteen hours": [
-            "canteen timing", "breakfast time", "lunch", "dinner", "when does the canteen open", "what time is breakfast in the canteen", "when is lunch served", "dinner time in the canteen", "canteen open hours"
+        "canteen hour": [
+            "canteen timing", "brakfast time", "lunch", "dinner", "when does the canteen open", "what time is breakfast in the canteen", "when is lunch served", "dinner time in the canteen", "canteen open hours"
         ],
         "hostel facilities": [
             "where can i stay", "hostel", "hostel details"
@@ -48,20 +48,49 @@ document.addEventListener("DOMContentLoaded", () => {
         ]
     };
 
-    // Function to get a random response based on user input
+    // Define the responses object with reply text
+    const responses = {
+        "hello": ["Hello! How can i assist you with your college related work today ?"],
+        "courses": "The college offers BBA, BCA, BA, Psc. See details on the college website.",
+        "fee": "💰The fee structure depends on the course. To know about installments or payment deadlines, check here (https://www.imperial.edu.in/fee-details)",
+        "syllabus": "📚You can find the syllabus for your course at (https://www.imperial.edu.in/downloads/Syllabus#programme-syllabus)",
+        "exam timetable": "The exam schedule 🗓️ will be published by the university. Keep an eye on the noticeboard.",
+        "holidays": "For holidays, you can check the academic calendar in your Sahaj app.",
+        "results": "Want to know who aced it 🏆? For the latest ranking, visit https://www.imperial.edu.in/academic-achievements.",
+        "clubs": "Clubs run the show! 🎤 Cultural, sports, social activities and more—find your place! Check details here https://www.imperial.edu.in/campus-life/clubs",
+        "library timings": "📖 Books, Peace, and Knowledge! Visit the library from 10 AM to 4 PM.",
+        // Note: For canteen, the intents key is "canteen hour" but here the response key is "Canteen hours"
+        "Canteen hours": "🍕 Hungry! Breakfast: 8:30 AM to 8:45 AM, Lunch: 1:15 PM to 2:00 PM, Dinner: 7:30 PM to 8:00 PM.",
+        "hostel facilities": "🏡 Hostel life is fun! The details are available with the warden.",
+        "unknown": "I'm sorry, I don't understand. Can you rephrase it?"
+    };
+
+    // Function to retrieve a response based on user input
     function getResponse(userInput) {
         const lowerInput = userInput.toLowerCase();
-        // Iterate over the keys except for "unknown"
-        for (const key in responses) {
+        // Loop through each intent (except "unknown")
+        for (const key in intents) {
             if (key === "unknown") continue;
-            if (lowerInput.includes(key)) {
-                const arr = responses[key];
-                return arr[Math.floor(Math.random() * arr.length)];
+            for (let phrase of intents[key]) {
+                // If the user's input contains the phrase (case-insensitive)
+                if (lowerInput.includes(phrase.toLowerCase())) {
+                    let matchedKey = key;
+                    // Fix for canteen: if key is "canteen hour", use the responses key "Canteen hours"
+                    if (matchedKey === "canteen hour") {
+                        matchedKey = "Canteen hours";
+                    }
+                    const reply = responses[matchedKey];
+                    if (Array.isArray(reply)) {
+                        return reply[Math.floor(Math.random() * reply.length)];
+                    } else if (typeof reply === "string") {
+                        return reply;
+                    }
+                }
             }
         }
-        // If no matching key is found, return unknown response
-        const unknownArr = responses["unknown"];
-        return unknownArr[Math.floor(Math.random() * unknownArr.length)];
+        // Return unknown response if no intent matches
+        const unknownReply = responses["unknown"];
+        return typeof unknownReply === "string" ? unknownReply : unknownReply[Math.floor(Math.random() * unknownReply.length)];
     }
 
     // Variable to hold the typing indicator element
@@ -83,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const userText = elements.userInput.value.trim();
         if (userText === "") return;
 
-        // Append the user message
+        // Append the user's message
         appendMessage(userText, "student");
 
         // Append and store the typing indicator
@@ -95,14 +124,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         elements.userInput.disabled = true;
 
-        // Simulate a delay to mimic a backend call (e.g., 500ms)
+        // Simulate a delay to mimic processing
         setTimeout(() => {
-            // Remove the typing indicator
             if (typingIndicator) {
                 typingIndicator.remove();
                 typingIndicator = null;
             }
-            // Get the response based on the user input
             const botResponse = getResponse(userText);
             appendMessage(botResponse, "teacher");
 
@@ -111,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 500);
     }
 
-    // Event listeners
+    // Set up event listeners
     if (elements.sendBtn) {
         elements.sendBtn.addEventListener("click", sendMessage);
     }
